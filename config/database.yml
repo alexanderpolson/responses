@@ -16,4 +16,4 @@ test:
 
 production:
   <<: *default
-  database: responses_production
+  database: responses
