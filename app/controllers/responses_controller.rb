@@ -1,16 +1,28 @@
 class ResponsesController < ApplicationController
   DEFAULT_COUNT = 5.freeze
+  CATEGORY_404  = '404'
 
-  before_filter :verify_category
+  before_filter :set_category
 
   def bomb
     @responses = Response.random_for_category(@category, params[:count] || DEFAULT_COUNT)
+    render formats: [:json]
+  end
+
+  def random
+    @response = Response.random_for_category(@category).first
+    render formats: [:json]
   end
 
   private
-  def verify_category
-    category_name = params.require(:category)
-    @category = Category.where(name: category_name).take
-    render_404 unless @category
+  def set_category
+    category_name = params[:category]
+    if(category_name.present?)
+      @category = Category.where(name: category_name).take || Category.missing
+    else
+      @category = Category.missing
+    end
   end
+
+
 end
