@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
 
   private
   def log_request
-    Rails.logger.info("Request Parameters: #{request.inspect}")
+    env_values = {}
+    ['HTTP_USER_AGENT', 'REMOTE_ADDR', 'HTTP_X_FORWARDED_FOR'].each do |key|
+      env_values[key] = request.env[key]
+    end
+    Rails.logger.info("Request ENV: #{env_values}")
   end
 end
