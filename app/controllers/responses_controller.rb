@@ -1,6 +1,5 @@
 class ResponsesController < ApplicationController
   DEFAULT_COUNT = 5.freeze
-  CATEGORY_404  = '404'
 
   before_filter :set_category
 
@@ -23,6 +22,4 @@ class ResponsesController < ApplicationController
       @category = Category.missing
     end
   end
-
-
 end
