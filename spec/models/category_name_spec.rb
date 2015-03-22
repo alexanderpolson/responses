@@ -1,5 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe CategoryName, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe CategoryName, type: :model do
+
+  describe '.missing' do
+
+    it 'returns a CategoryName' do
+      allow(CategoryName).to receive_message_chain(:where, :take).and_return(CategoryName.create)
+      expect(described_class.missing).to be_a(CategoryName)
+    end
+  end
 end

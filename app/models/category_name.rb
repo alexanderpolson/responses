@@ -4,6 +4,6 @@ class CategoryName < ActiveRecord::Base
   belongs_to :category
 
   def self.missing
-    CategoryName.where(name: MISSING).take.category
+    CategoryName.where(name: MISSING).take
   end
 end
