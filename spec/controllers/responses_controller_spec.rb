@@ -2,32 +2,32 @@ require 'rails_helper'
 
 describe ResponsesController, type: :controller do
 
-  let(:category_name) { 'name' }
-  let(:category) { Category.create(name: category_name) }
+  let(:default_category_name) { CategoryName.create(name: 'default', category: Category.create) }
+  let(:default_category) { default_category_name.category }
+  let(:category_name) { CategoryName.create(name: 'name', category: Category.create) }
+  let(:category) { category_name.category }
+
+  before(:each) do
+    allow(CategoryName).to receive(:missing).and_return(default_category_name)
+  end
 
   shared_examples_for 'setting the category' do |action|
-    let(:default_category_name) { 'default' }
-    let(:default_category) { Category.create(name: default_category_name) }
-
-    before(:each) do
-      allow(Category).to receive(:missing).and_return(default_category)
-    end
 
     it 'sets the category' do
-      allow(Category).to receive_message_chain(:where, :take).and_return(category)
-      get action, category: category_name
-      expect(assigns(:category)).to eql(category)
+      allow(CategoryName).to receive_message_chain(:where, :take).and_return(category_name)
+      get action, category: category_name.name
+      expect(assigns(:category_name)).to eql(category_name)
     end
 
     it 'sets the category to the default when one is not specified' do
       get action
-      expect(assigns(:category)).to eql(default_category)
+      expect(assigns(:category_name)).to eql(default_category_name)
     end
 
     it 'sets the category to the default when the one specified does not exist' do
-      allow(Category).to receive_message_chain(:where, :take).and_return(nil)
+      allow(CategoryName).to receive_message_chain(:where, :take).and_return(nil)
       get action, category: 'missing category'
-      expect(assigns(:category)).to eql(default_category)
+      expect(assigns(:category_name)).to eql(default_category_name)
     end
   end
 

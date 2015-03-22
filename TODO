@@ -1,0 +1,6 @@
+* Validations
+** CategoryName
+*** unique
+* Specs
+** 404 for no responses for category.
+** Views
